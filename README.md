@@ -22,25 +22,25 @@ Firebase Collider is a powerful tool designed to identify vulnerabilities and as
 ## Getting Started
 ### Install
 To install firebase collider simply run the following command:
-"""
+```
 pip install firebase_collider
-"""
+```
 This will install the python library and the CLI tool.
 
 ### Verify Installation
 To check if everything is installed start a new terminal and run the following command:
-'''
+```
 firebase_collider.py vulnerable-firebase
-'''
+```
 It should show some results ;)
 
 
 ## CLI Tool
 
 #### Usage
-'''
+```
 Usage: firebase_collider.py [OPTIONS] <url or apk or project>
-'''
+```
 
 
 #### Options
@@ -56,53 +56,53 @@ Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 
 ##### Scan an URL
 ###### With CLI:
-'''
+```
 firebase_collider.py https://vulnerable-firebase-default-rtdb.firebaseio.com
-'''
+```
 
 ###### With Python:
-'''
+```
 import firebase_collider
 
 result = firebase_collider.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
-'''
+```
 
 ##### Scan a project and dump all databases
 ###### With CLI:
-'''
+```
 firebase_collider.py vulnerable-firebase -d results
-'''
+```
 
 ###### With Python:
-'''
+```
 import firebase_collider
 
 result = firebase_collider.scan_project("vulnerable-firebase", dump_folder="results")
-'''
+```
 
 ##### Scan an APK
 ###### With CLI:
-'''
+```
 firebase_collider.py vulnerable_app.apk
-'''
+```
 
 ###### With Python:
-'''
+```
 import firebase_collider
 
 result = firebase_collider.scan_apk("vulnerable-firebase")
-'''
+```
 
 ##### Dump all databases from a list of URLs
 ###### With CLI from a txt file:
-'''
+```
 firebase_collider.py -v -u list_of_urls.txt -d results
-'''
+```
 
 ###### With CLI from a json file:
-'''
+```
 firebase_collider.py -v -u list_of_urls.json -d results
-'''
+```
 
 
 ## Changelog
