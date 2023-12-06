@@ -15,10 +15,10 @@
 
 
 ## Features TO-DO
-- Support for **firestore.googleapis.com** urls
-- Support for **firebasestorage.googleapis.com** and **appspot.com** urls
-- Support for **firebaseapp.com** and **web.app** urls
-- Support for custom urls
+- Support for **firestore.googleapis.com** urls.
+- Support for **firebasestorage.googleapis.com** and **appspot.com** urls.
+- Support for **firebaseapp.com** and **web.app** urls.
+- Support for custom urls.
 
 
 ## Getting Started
