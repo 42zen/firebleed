@@ -39,13 +39,13 @@ It should show some results ;)
 
 ## CLI Tool
 
-#### Usage
+### Usage
 ```
 Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 ```
 
 
-#### Options
+### Options
 * **-u** or **--urls-list** <filename>      : Scan a list of urls from a file
 * **-a** or **--apks-list** <filename>      : Scan a list of apks from a file
 * **-p** or **--projects-list** <filename>  : Scan a list of projects from a file
@@ -56,52 +56,52 @@ Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 
 ## Examples
 
-##### Scan an URL
-###### With CLI:
+### Scan an URL
+#### With CLI:
 ```
 firebase_collider.py https://vulnerable-firebase-default-rtdb.firebaseio.com
 ```
 
-###### With Python:
+#### With Python:
 ```
 import firebase_collider
 
 result = firebase_collider.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
 ```
 
-##### Scan a project and dump all databases
-###### With CLI:
+### Scan a project and dump all databases
+#### With CLI:
 ```
 firebase_collider.py vulnerable-firebase -d results
 ```
 
-###### With Python:
+#### With Python:
 ```
 import firebase_collider
 
 result = firebase_collider.scan_project("vulnerable-firebase", dump_folder="results")
 ```
 
-##### Scan an APK
-###### With CLI:
+### Scan an APK
+#### With CLI:
 ```
 firebase_collider.py vulnerable_app.apk
 ```
 
-###### With Python:
+#### With Python:
 ```
 import firebase_collider
 
 result = firebase_collider.scan_apk("vulnerable-firebase")
 ```
 
-##### Dump all databases from a list of URLs
-###### With CLI from a txt file:
+### Dump all databases from a list of URLs
+#### With CLI from a txt file:
 ```
 firebase_collider.py -v -u list_of_urls.txt -d results
 ```
 
-###### With CLI from a json file:
+#### With CLI from a json file:
 ```
 firebase_collider.py -v -u list_of_urls.json -d results
 ```
