@@ -2,23 +2,23 @@
 
 
 ## Overview
-Firebase Collider is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various Firebase services, including RealTime Database, Firestore Database, Firebase Storage, and Firebase Hosting, to provide comprehensive insights into project status, rules, and potential collisions with other services.
+Firebase Collider is a powerful tool designed to identify vulnerabilities and assess security risks within [Firebase](https://firebase.google.com/) projects. Leveraging its extensive feature set, the tool scans various Firebase services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
 
 
 ## Features
-* Support firebaseio.com and firebasedatabase.app urls.
-* Scan Firebase RealTime Database for project id, status, rules and content.
-* Scan Firestore Database for status and rules.
-* Scan Firebase Storage for status, rules and files.
-* Scan Firebase Hosting V1 and V2 for status.
+* Support **firebaseio.com** and **firebasedatabase.app** urls.
+* Scan **Firebase RealTime Database** for project id, status, rules and content.
+* Scan **Firestore Database** for status and rules.
+* Scan **Firebase Storage** for status, rules and files.
+* Scan **Firebase Hosting** V1 and V2 for status.
 * Automatically find collisions with others services.
 
 
 ## Features TO-DO
-- Support for firestore.googleapis.com urls
-- Support for firebasestorage.googleapis.com and appspot.com urls
-- Support for firebaseapp.com and web.app urls
 - Support for custom urls
+- Support for **firestore.googleapis.com** urls
+- Support for **firebasestorage.googleapis.com** and appspot.com urls
+- Support for **firebaseapp.com** and web.app urls
 
 
 ## Getting Started
