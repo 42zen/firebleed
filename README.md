@@ -1,7 +1,9 @@
 # The Firebase Collider by zen
 
+
 ## Overview
 Firebase Collider is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various Firebase services, including RealTime Database, Firestore Database, Firebase Storage, and Firebase Hosting, to provide comprehensive insights into project status, rules, and potential collisions with other services.
+
 
 ## Features
 * Support firebaseio.com and firebasedatabase.app urls.
