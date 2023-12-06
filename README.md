@@ -1,4 +1,4 @@
-# The Firebase Collider by zen
+# The Firebase Collider by [zen](https://linkedin.com/in/mathias-bochet)
 
 
 ## Overview
