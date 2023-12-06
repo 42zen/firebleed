@@ -112,4 +112,4 @@ firebase_collider.py -v -u list_of_urls.json -d results
 
 
 ## Author
-* [Mathias Bochet](https://be.linkedin.com/in/mathias-bochet) aka [zen](https://github.com/42zen/).
+* [Mathias Bochet](https://linkedin.com/in/mathias-bochet) aka [zen](https://github.com/42zen/).
