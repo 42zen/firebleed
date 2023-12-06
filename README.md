@@ -4,12 +4,12 @@
 Firebase Collider is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various Firebase services, including RealTime Database, Firestore Database, Firebase Storage, and Firebase Hosting, to provide comprehensive insights into project status, rules, and potential collisions with other services.
 
 ## Features
-* Support firebaseio.com and firebasedatabase.app urls
-* Scan Firebase RealTime Database for project id, status, rules and content
-* Scan Firestore Database for status and rules
-* Scan Firebase Storage for status, rules and files
-* Scan Firebase Hosting V1 and V2 for status
-* Automatically find collisions with others services
+* Support firebaseio.com and firebasedatabase.app urls.
+* Scan Firebase RealTime Database for project id, status, rules and content.
+* Scan Firestore Database for status and rules.
+* Scan Firebase Storage for status, rules and files.
+* Scan Firebase Hosting V1 and V2 for status.
+* Automatically find collisions with others services.
 
 
 ## Features TO-DO
@@ -20,14 +20,14 @@ Firebase Collider is a powerful tool designed to identify vulnerabilities and as
 
 
 ## Getting Started
-#### Install
+### Install
 To install firebase collider simply run the following command:
-'''
+"""
 pip install firebase_collider
-'''
+"""
 This will install the python library and the CLI tool.
 
-#### Verify Installation
+### Verify Installation
 To check if everything is installed start a new terminal and run the following command:
 '''
 firebase_collider.py vulnerable-firebase
