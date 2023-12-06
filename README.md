@@ -109,3 +109,7 @@ firebase_collider.py -v -u list_of_urls.json -d results
 
 ## Changelog
 - 06/12/2023 - Initial script that can scan firebase realtime database for infos, status and collisions.
+
+
+## Author
+* [Mathias Bochet](https://be.linkedin.com/in/mathias-bochet) aka [zen](https://github.com/42zen/).
