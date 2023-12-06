@@ -6,19 +6,19 @@ Firebase Collider is a powerful tool designed to identify vulnerabilities and as
 
 
 ## Features
-* Support **firebaseio.com** and **firebasedatabase.app** urls.
 * Scan **Firebase RealTime Database** for project id, status, rules and content.
 * Scan **Firestore Database** for status and rules.
 * Scan **Firebase Storage** for status, rules and files.
 * Scan **Firebase Hosting** V1 and V2 for status.
 * Automatically find collisions with others services.
+* Support **firebaseio.com** and **firebasedatabase.app** urls.
 
 
 ## Features TO-DO
-- Support for custom urls
 - Support for **firestore.googleapis.com** urls
 - Support for **firebasestorage.googleapis.com** and appspot.com urls
 - Support for **firebaseapp.com** and web.app urls
+- Support for custom urls
 
 
 ## Getting Started
@@ -56,7 +56,7 @@ Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 
 ## Examples
 
-### Scan an URL
+### Scan an URL:
 #### With CLI:
 ```
 firebase_collider.py https://vulnerable-firebase-default-rtdb.firebaseio.com
@@ -69,7 +69,7 @@ import firebase_collider
 result = firebase_collider.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
 ```
 
-### Scan a project and dump all databases
+### Scan a project and dump all databases:
 #### With CLI:
 ```
 firebase_collider.py vulnerable-firebase -d results
@@ -82,7 +82,7 @@ import firebase_collider
 result = firebase_collider.scan_project("vulnerable-firebase", dump_folder="results")
 ```
 
-### Scan an APK
+### Scan an APK:
 #### With CLI:
 ```
 firebase_collider.py vulnerable_app.apk
@@ -95,7 +95,7 @@ import firebase_collider
 result = firebase_collider.scan_apk("vulnerable-firebase")
 ```
 
-### Dump all databases from a list of URLs
+### Dump all databases from a list of URLs:
 #### With CLI from a txt file:
 ```
 firebase_collider.py -v -u list_of_urls.txt -d results
