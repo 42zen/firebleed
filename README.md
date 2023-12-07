@@ -55,12 +55,21 @@ Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 
 
 ### Options
-* **-u** or **--urls-list** <span><filename></span> : Scan a list of urls from a file
+* **-u** or **--urls-list** <filename>      : Scan a list of urls from a file
 * **-a** or **--apks-list** <filename>      : Scan a list of apks from a file
 * **-p** or **--projects-list** <filename>  : Scan a list of projects from a file
 * **-f** or **--fast**                      : Do not check for infos or collisions
 * **-d** or **--dump** <foldername>         : Dump all databases in a folder
 * **-v** or **--verbose**                   : Enable all the debug messages
+
+|  Code  |        Name         | Parameter  |           Description                |
+|--------|---------------------|------------|--------------------------------------|
+| **-u** | **--urls-list**     | filename   | Scan a list of urls from a file      |
+| **-a** | **--apks-list**     | filename   | Scan a list of apks from a file      |
+| **-p** | **--projects-list** | filename   | Scan a list of projects from a file  |
+| **-f** | **--fast**          |            | Do not check for infos or collisions |
+| **-d** | **--dump**          | foldername | Dump all databases in a folder       |
+| **-v** | **--verbose**       |            | Enable all the debug messages        |
 
 
 ## Examples
