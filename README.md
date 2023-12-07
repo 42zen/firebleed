@@ -22,8 +22,8 @@
 
 
 ## Interestings Papers
-- [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/) and [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb).
-- [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html).
+- [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/), [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb) and [rest api](https://firebase.google.com/docs/reference/rest/auth).
+- [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html) and [rest api](https://firebase.google.com/docs/reference/remote-config/rest).
 - [Firebase Machine Learning](https://firebase.google.com/docs/ml).
 - [Firebase Cloud Functions](https://firebase.google.com/docs/functions).
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
@@ -31,11 +31,12 @@
 - [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores): [sources](https://github.com/iosiro/baserunner).
 - Firebase Scanner: [by arxenix](https://github.com/arxenix/firebase-scanner), [by shivsahni](https://github.com/shivsahni/FireBaseScanner).
 - [PyreBase](https://github.com/thisbejim/Pyrebase).
+- [Firebase Enumeration](https://cloud.hacktricks.xyz/pentesting-cloud/gcp-security/gcp-services/gcp-databases-enum/gcp-firebase-enum).
 
 
 ## Getting Started
 ### Prerequisites
-* Install [**Python 3**](https://www.python.org/downloads/).
+* Install [Python 3](https://www.python.org/downloads/).
 * Install **requests** and **zipfile**:
 ```
 pip install requests zipfile
