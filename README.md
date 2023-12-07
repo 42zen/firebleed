@@ -22,10 +22,10 @@
 
 
 ## Research TO-DO
-- [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/) and [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb).
+- [Firebase Authentication](https://firebase.google.com/docs/auth):  [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/) and [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb).
 - [Firebase Machine Learning](https://firebase.google.com/docs/ml).
 - [Firebase Cloud Functions](https://firebase.google.com/docs/functions).
-- [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html).
+- [Firebase Remote Config](https://firebase.google.com/docs/remote-config):  [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html).
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
 
 
