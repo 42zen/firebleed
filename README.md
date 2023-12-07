@@ -2,7 +2,7 @@
 
 
 ## Overview
-**Firebase Collider** is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various [Firebase](https://firebase.google.com/) services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
+**The Firebase Collider** is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various [Firebase](https://firebase.google.com/) services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
 
 
 ## Features
@@ -41,7 +41,7 @@ This will install the python library and the CLI tool.
 ### Verify Installation
 To check if everything is installed start a new terminal and run the following command:
 ```
-firebase_collider.py vulnerable-firebase
+python firebase_collider.py vulnerable-firebase
 ```
 It should show some results ;)
 
@@ -70,7 +70,7 @@ Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 ### Scan an URL:
 #### With CLI:
 ```
-firebase_collider.py https://vulnerable-firebase-default-rtdb.firebaseio.com
+python firebase_collider.py https://vulnerable-firebase-default-rtdb.firebaseio.com
 ```
 
 #### With Python:
@@ -83,7 +83,7 @@ result = firebase_collider.scan_url("https://vulnerable-firebase-default-rtdb.fi
 ### Scan a project and dump all databases:
 #### With CLI:
 ```
-firebase_collider.py vulnerable-firebase -d results
+python firebase_collider.py vulnerable-firebase -d results
 ```
 
 #### With Python:
@@ -96,7 +96,7 @@ result = firebase_collider.scan_project("vulnerable-firebase", dump_folder="resu
 ### Scan an APK:
 #### With CLI:
 ```
-firebase_collider.py vulnerable_app.apk
+python firebase_collider.py vulnerable_app.apk
 ```
 
 #### With Python:
@@ -109,12 +109,12 @@ result = firebase_collider.scan_apk("vulnerable-firebase")
 ### Dump all databases from a list of URLs:
 #### With CLI from a txt file:
 ```
-firebase_collider.py -v -u list_of_urls.txt -d results
+python firebase_collider.py -v -u list_of_urls.txt -d results
 ```
 
 #### With CLI from a json file:
 ```
-firebase_collider.py -v -u list_of_urls.json -d results
+python firebase_collider.py -v -u list_of_urls.json -d results
 ```
 
 
