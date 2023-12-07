@@ -28,7 +28,7 @@
 - [Firebase Cloud Functions](https://firebase.google.com/docs/functions).
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
 - [Brandon Evans Research](https://www.sans.org/white-papers/39885/).
-- [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores) ([sources](https://github.com/iosiro/baserunner)).
+- [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores): [sources](https://github.com/iosiro/baserunner).
 
 
 ## Getting Started
