@@ -6,15 +6,17 @@
 
 
 ## Features
+* Support **urls** and **project names** scanning.
 * Scan **Firebase RealTime Database** for project id, status, rules and content.
 * Scan **Firestore Database** for status and rules.
 * Scan **Firebase Storage** for status, rules and files.
 * Scan **Firebase Hosting** V1 and V2 for status.
-* Automatically find collisions with others services.
+* Automatically find [collisions](https://medium.com/TODO) with others services.
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
 
 
 ## Features In Development
+- Support apk files.
 - Support for **firestore.googleapis.com** urls.
 - Support for **firebasestorage.googleapis.com** and **appspot.com** urls.
 - Support for **firebaseapp.com** and **web.app** urls.
@@ -118,7 +120,6 @@ firebase_collider.py -v -u list_of_urls.json -d results
 - [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/), [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb) and [rest api](https://firebase.google.com/docs/reference/rest/auth).
 - [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html) and [rest api](https://firebase.google.com/docs/reference/remote-config/rest).
 - [Firebase Machine Learning](https://firebase.google.com/docs/ml).
-- [Firebase Cloud Functions](https://firebase.google.com/docs/functions).
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
 - [Brandon Evans Research](https://www.sans.org/white-papers/39885/).
 - [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores): [sources](https://github.com/iosiro/baserunner).
