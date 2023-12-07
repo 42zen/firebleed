@@ -22,23 +22,26 @@
 
 
 ## Research TO-DO
-- [Firebase Authentication](https://firebase.google.com/docs/auth).
+- [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/) and [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb).
 - [Firebase Machine Learning](https://firebase.google.com/docs/ml).
 - [Firebase Cloud Functions](https://firebase.google.com/docs/functions).
-- [Firebase Remote Config](https://firebase.google.com/docs/remote-config).
+- [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html).
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
 
 
-## Interesting Previous Research
-- [Firebase Remote Config Dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html).
-- [Firebase Manual Authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/).
-- [Firebase Auth Shemes](https://time2hack.com/auth-schemes-in-google-firebase/).
-- [Firebase Auth Vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb).
-- [Firebase Security Audit](https://www.sans.org/white-papers/39885/).
+## Interesting Research
+- [Brandon Evans Research](https://www.sans.org/white-papers/39885/).
 - [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores) ([sources](https://github.com/iosiro/baserunner)).
 
 
 ## Getting Started
+### Prerequisites
+* Install [**Python 3**](https://www.python.org/downloads/).
+* Install **requests** and **zipfile**:
+```
+pip install requests zipfile
+```
+
 ### Install
 To install firebase collider simply run the following command:
 ```
