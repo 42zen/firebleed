@@ -112,9 +112,9 @@ def extract_urls_from_apk(apk_path):
     # create a tmp folder
     try:
         os.mkdir('tmp')
-        do_not_delete = False
+        delete_folder = True
     except FileExistsError:
-        do_not_delete = True
+        delete_folder = False
     
     # unzip the apk
     with zipfile.ZipFile(apk_path, 'r') as zip_ref:
@@ -124,7 +124,7 @@ def extract_urls_from_apk(apk_path):
     urls = []
 
     # delete the folder if needed
-    if do_not_delete == False:
+    if delete_folder == True:
         # TODO: delete tmp folder
         pass
 
