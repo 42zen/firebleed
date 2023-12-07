@@ -29,6 +29,8 @@
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
 - [Brandon Evans Research](https://www.sans.org/white-papers/39885/).
 - [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores): [sources](https://github.com/iosiro/baserunner).
+- Firebase Scanner: [by arxenix](https://github.com/arxenix/firebase-scanner), [by shivsahni](https://github.com/shivsahni/FireBaseScanner).
+- [PyreBase](https://github.com/thisbejim/Pyrebase).
 
 
 ## Getting Started
@@ -125,4 +127,4 @@ firebase_collider.py -v -u list_of_urls.json -d results
 
 
 ## Changelog
-- 06/12/2023 - Initial script that can scan firebase realtime database for infos, status and collisions.
+- **06/12/2023** - Initial script that can scan firebase project name for active services and scan firebase realtime database url for infos, status, rules and services collisions. The script handle firebase realtime database, firestore, firebase storage and firebase hosting.
