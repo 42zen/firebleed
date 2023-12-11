@@ -103,7 +103,7 @@ python firebleed.py vulnerable_app.apk
 ```
 import firebleed
 
-result = firebleed.scan_apk("vulnerable-firebase")
+result = firebleed.scan_apk("vulnerable_app.apk")
 ```
 
 ### Dump all databases from a list of URLs:
