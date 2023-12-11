@@ -15,12 +15,12 @@
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
 * Support **firestore.googleapis.com** urls.
 * Support **firebasestorage.googleapis.com** and **appspot.com** urls.
+* Support **firebaseapp.com** and **web.app** urls.
 
 
 ## Features In Development
 - Support **apk files** scanning.
-- Support for **firebaseapp.com** and **web.app** urls.
-- Support for **custom urls** scanning.
+- Support **website** scanning.
 - Automatically find **api keys** from apk.
 
 
@@ -133,4 +133,4 @@ python firebleed.py -v -u list_of_urls.json -d results
 
 ## Changelog
 - **06/12/2023** - Initial script that can scan firebase project name for active services and scan firebase realtime database url for infos, status, rules and services collisions. The script handle firebase realtime database, firestore, firebase storage and firebase hosting.
-- **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls and firebase storage database urls.
+- **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls, firebase storage database urls, and firebase hosting urls.

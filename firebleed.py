@@ -52,65 +52,55 @@ def scan_url(url, verbose=False):
     # init the scan
     scan_results = []
 
-    # check if this is a realtime database url
-    if service_type == FIREBASE_REALTIME_DATABASE:
-        
-        # scan the realtime database
-        scan_result = scan_realtime_database_from_url(url, verbose=verbose)
+    # build the scan process
+    scan_processes = {
+        FIREBASE_REALTIME_DATABASE: {
+            'main_scanner': scan_realtime_database_from_url,
+            'collision_scanners': [
+                scan_firestore_database_from_project,
+                scan_storage_database_from_project,
+                scan_hosting_v1_from_project,
+                scan_hosting_v2_from_project
+            ]
+        },
+        FIREBASE_FIRESTORE_DATABASE: {
+            'main_scanner': scan_firestore_database_from_url,
+            'collision_scanners': [
+                scan_realtime_database_from_project,
+                scan_storage_database_from_project,
+                scan_hosting_v1_from_project,
+                scan_hosting_v2_from_project
+            ]
+        },
+        FIREBASE_STORAGE_DATABASE: {
+            'main_scanner': scan_storage_database_from_url,
+            'collision_scanners': [
+                scan_realtime_database_from_project,
+                scan_firestore_database_from_project,
+                scan_hosting_v1_from_project,
+                scan_hosting_v2_from_project
+            ]
+        },
+        FIREBASE_HOSTING: {
+            'main_scanner': scan_hosting_from_url,
+            'collision_scanners': [
+                scan_realtime_database_from_project,
+                scan_firestore_database_from_project,
+                scan_storage_database_from_project
+            ]
+        }
+    }
+
+    # run the scan process
+    if service_type in scan_processes:
+        scan_process = scan_processes[service_type]
+        scan_result = scan_process['main_scanner'](url, verbose=verbose)
         if scan_result is None:
             return []
         if scan_result['status'] != 'not found':
             scan_results += [ scan_result ]
         project_id = scan_result['project_id']
-
-        # scan the others services
-        scan_functions = [
-            scan_firestore_database_from_project,
-            scan_storage_database_from_project,
-            scan_hosting_v1_from_project,
-            scan_hosting_v2_from_project
-        ]
-        scan_results += scan_project(project_id, scan_functions=scan_functions, verbose=verbose)
-
-    # check if this is a firestore database url
-    elif service_type == FIREBASE_FIRESTORE_DATABASE:
-
-        # scan the realtime database
-        scan_result = scan_firestore_database_from_url(url, verbose=verbose)
-        if scan_result is None:
-            return []
-        if scan_result['status'] != 'not found':
-            scan_results += [ scan_result ]
-        project_id = scan_result['project_id']
-
-        # scan the others services
-        scan_functions = [
-            scan_realtime_database_from_project,
-            scan_storage_database_from_project,
-            scan_hosting_v1_from_project,
-            scan_hosting_v2_from_project
-        ]
-        scan_results += scan_project(project_id, scan_functions=scan_functions, verbose=verbose)
-
-    # check if this is a storage database url
-    elif service_type == FIREBASE_STORAGE_DATABASE:
-
-        # scan the realtime database
-        scan_result = scan_storage_database_from_url(url, verbose=verbose)
-        if scan_result is None:
-            return []
-        if scan_result['status'] != 'not found':
-            scan_results += [ scan_result ]
-        project_id = scan_result['project_id']
-
-        # scan the others services
-        scan_functions = [
-            scan_realtime_database_from_project,
-            scan_firestore_database_from_project,
-            scan_hosting_v1_from_project,
-            scan_hosting_v2_from_project
-        ]
-        scan_results += scan_project(project_id, scan_functions=scan_functions, verbose=verbose)
+        scan_results += scan_project(project_id, scan_functions=scan_process['collision_scanners'], verbose=verbose)
 
     # return the scan results
     return scan_results
@@ -202,6 +192,10 @@ def find_service_from_url(url, verbose=False):
     # check if this is a firebase storage database
     if url.find(firebase_storage_database_domain) != -1 or url.find('.appspot.com') != -1:
         service_type = FIREBASE_STORAGE_DATABASE
+
+    # check if the is a firebase hosting
+    if url.find(firebase_hosting_v1_domain) != -1 or url.find(firebase_hosting_v2_domain) != -1:
+        service_type = FIREBASE_HOSTING
 
     # print logs  
     if verbose == True:
@@ -551,7 +545,6 @@ def scan_storage_database_from_url(url, verbose=False):
                 appspot_id = appspot_id[:end_pos]
             if len(appspot_id) == 0:
                 return None
-            print(appspot_id)
             return scan_storage_database_from_appspot(appspot_id, verbose=verbose)
 
     # find project from appspot url
@@ -625,7 +618,31 @@ def scan_storage_database_from_appspot(appspot_id, verbose=False):
         'rules': rules,
     }
 
-# scan a firebase hosting v1
+# scan a firebase hosting from an url
+def scan_hosting_from_url(url, verbose=False):
+
+    # clean the url from protocol
+    if url.startswith('http://') == True:
+        url = url[7:]
+    if url.startswith('https://') == True:
+        url = url[8:]
+    
+    # find project from url
+    pos = url.find('.' + firebase_hosting_v1_domain)
+    if pos != -1:
+        project_id = url[:pos]
+        return scan_hosting_v1_from_project(project_id, verbose=verbose)
+    
+    # find project from url
+    pos = url.find('.' + firebase_hosting_v2_domain)
+    if pos != -1:
+        project_id = url[:pos]
+        return scan_hosting_v2_from_project(project_id, verbose=verbose)
+    
+    # couldn't find any hosting domains
+    return None
+
+# scan a firebase hosting v1 from a project
 def scan_hosting_v1_from_project(project_id, verbose=False):
     
     # print logs
@@ -660,7 +677,7 @@ def scan_hosting_v1_from_project(project_id, verbose=False):
         'status': status,
     }
 
-# scan a firebase hosting v2
+# scan a firebase hosting v2 from a project
 def scan_hosting_v2_from_project(project_id, verbose=False):
     
     # print logs
