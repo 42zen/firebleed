@@ -27,7 +27,8 @@ firebase_firestore_database_domain = 'firestore.googleapis.com'
 firebase_firestore_database_url = f"https://{firebase_firestore_database_domain}/v1"
 
 # set the firebase storage database url
-firebase_storage_database_url = "https://firebasestorage.googleapis.com/v0/b"
+firebase_storage_database_domain = "firebasestorage.googleapis.com"
+firebase_storage_database_url = f"https://{firebase_storage_database_domain}/v0/b"
 
 # set the firebase hosting domain
 firebase_hosting_v1_domain = 'firebaseapp.com'
@@ -56,6 +57,8 @@ def scan_url(url, verbose=False):
         
         # scan the realtime database
         scan_result = scan_realtime_database_from_url(url, verbose=verbose)
+        if scan_result is None:
+            return []
         if scan_result['status'] != 'not found':
             scan_results += [ scan_result ]
         project_id = scan_result['project_id']
@@ -84,6 +87,26 @@ def scan_url(url, verbose=False):
         scan_functions = [
             scan_realtime_database_from_project,
             scan_storage_database_from_project,
+            scan_hosting_v1_from_project,
+            scan_hosting_v2_from_project
+        ]
+        scan_results += scan_project(project_id, scan_functions=scan_functions, verbose=verbose)
+
+    # check if this is a storage database url
+    elif service_type == FIREBASE_STORAGE_DATABASE:
+
+        # scan the realtime database
+        scan_result = scan_storage_database_from_url(url, verbose=verbose)
+        if scan_result is None:
+            return []
+        if scan_result['status'] != 'not found':
+            scan_results += [ scan_result ]
+        project_id = scan_result['project_id']
+
+        # scan the others services
+        scan_functions = [
+            scan_realtime_database_from_project,
+            scan_firestore_database_from_project,
             scan_hosting_v1_from_project,
             scan_hosting_v2_from_project
         ]
@@ -175,6 +198,10 @@ def find_service_from_url(url, verbose=False):
     # check if this is a firebase firestore database
     if url.find(firebase_firestore_database_domain) != -1:
         service_type = FIREBASE_FIRESTORE_DATABASE
+
+    # check if this is a firebase storage database
+    if url.find(firebase_storage_database_domain) != -1 or url.find('.appspot.com') != -1:
+        service_type = FIREBASE_STORAGE_DATABASE
 
     # print logs  
     if verbose == True:
@@ -510,18 +537,52 @@ def scan_firestore_database_from_project(project_id, database_id="(default)", co
         scan_result['rules'] = rules
     return scan_result
 
-# scan a firebase storage database
+# scan a firebase storage database from an url
+def scan_storage_database_from_url(url, verbose=False):
+    
+    # find appspot from storage url
+    pos = url.find(firebase_storage_database_domain + '/')
+    if pos != -1:
+        pos = url.find('/b/')
+        if pos != -1:
+            appspot_id = url[pos + 3:]
+            end_pos = appspot_id.find('/')
+            if end_pos != -1:
+                appspot_id = appspot_id[:end_pos]
+            if len(appspot_id) == 0:
+                return None
+            print(appspot_id)
+            return scan_storage_database_from_appspot(appspot_id, verbose=verbose)
+
+    # find project from appspot url
+    pos = url.find('.appspot.com')
+    if pos != -1:
+        project_id = url[:pos]
+        project_id = project_id.split('/')
+        project_id = project_id[-1]
+        return scan_storage_database_from_project(project_id, verbose=verbose)
+    
+    # didn't find anything to scan
+    return None
+
+# scan a firebase storage database from a project
 def scan_storage_database_from_project(project_id, verbose=False):
+    
+    # guess the appspot id
+    appspot_id = f"{project_id}.appspot.com"
+
+    # scan the storage database
+    return scan_storage_database_from_appspot(appspot_id, verbose=verbose)
+
+# scan a firebase storage database from an appspot
+def scan_storage_database_from_appspot(appspot_id, verbose=False):
     
     # print logs
     if verbose == True:
         print(f"[*] Scanning storage database...", end='', flush=True)
 
-    # guess appspot url from project id
-    appspot_url = f"{project_id}.appspot.com"
-
-    # build url from appspot url
-    url = f"{firebase_storage_database_url}/{appspot_url}/o/"
+    # build the url
+    url = f"{firebase_storage_database_url}/{appspot_id}/o/"
         
     # request the database status
     response = requests.get(url)
@@ -542,16 +603,23 @@ def scan_storage_database_from_project(project_id, verbose=False):
     else:
         status = 'unknown status'
         if DEBUG_MODE == True:
-            print("scan_storage_database_from_project:", response.status_code, '\n', response.text, '\n')
+            print("scan_storage_database_from_appspot:", response.status_code, '\n', response.text, '\n')
     
     # print logs
     if verbose == True:
         print(f"done: {status}.")
 
+    # build the project id
+    project_id = appspot_id
+    pos = project_id.find('.')
+    if pos != -1:
+        project_id = project_id[:pos]
+
     # return the scan result
     return {
         'url': url,
         'service': FIREBASE_STORAGE_DATABASE,
+        'appspot_id': appspot_id,
         'project_id': project_id,
         'status': status,
         'rules': rules,
