@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://linkedin.com/in/mathias-bochet">
-    <img src="./logo.png" alt="FireBleed">
+    <img src="./logo.png" alt="FireBleed" width="50%">
   </a>
 </div>
 
