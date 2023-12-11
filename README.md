@@ -60,14 +60,14 @@ Usage: firebleed.py [OPTIONS] <url or apk or project>
 
 
 ### Options
-|  Code  |        Name         | Parameter  |           Description                |
-|--------|---------------------|------------|--------------------------------------|
-| **-u** | **--urls-list**     | filename   | Scan a list of urls from a file      |
-| **-a** | **--apks-list**     | filename   | Scan a list of apks from a file      |
-| **-p** | **--projects-list** | filename   | Scan a list of projects from a file  |
-| **-f** | **--fast**          |            | Do not check for infos or collisions |
-| **-d** | **--dump**          | foldername | Dump all databases in a folder       |
-| **-v** | **--verbose**       |            | Enable all the debug messages        |
+|  Code  |        Name         | Parameter  |           Description                      |
+|--------|---------------------|------------|--------------------------------------------|
+| **-u** | **--urls-list**     | filename   | Scan a list of urls from a file            |
+| **-a** | **--apks-list**     | filename   | Scan a list of apks from a file            |
+| **-p** | **--projects-list** | filename   | Scan a list of projects from a file        |
+| **-f** | **--fast**          |            | Do not check for extra infos or collisions |
+| **-d** | **--dump**          | foldername | Dump all databases in a folder             |
+| **-q** | **--quiet**         |            | Disable all console messages               |
 
 
 ## Examples

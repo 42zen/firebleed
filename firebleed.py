@@ -880,7 +880,7 @@ class Settings:
             'name': 'quiet',
             'code': 'q',
             'parameter': None,
-            'description': 'Disable console messages',
+            'description': 'Disable all console messages',
             'function': self.disable_verbose
         },
         {
