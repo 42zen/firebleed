@@ -1,7 +1,9 @@
 # FireBleed by [zen](https://linkedin.com/in/mathias-bochet)
 
 
-![FireBleed](./logo.png)
+<div align="center">
+  <img src="./logo.png" alt="Logo">
+</div>
 
 
 ## Overview
