@@ -2,12 +2,10 @@
     <img src="./logo.png" alt="FireBleed" width="5%">
     FireBleed by <a href="https://linkedin.com/in/mathias-bochet">zen</a>
 </h1>
-<br />
 
 
 ## Overview
 **FireBleed** is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various [Firebase](https://firebase.google.com/) services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
-<br />
 
 
 ## Features
@@ -21,18 +19,14 @@
 * Support **firestore.googleapis.com** urls.
 * Support **firebasestorage.googleapis.com** and **appspot.com** urls.
 * Support **firebaseapp.com** and **web.app** urls.
-<br />
 
 
 ## Features In Development
 - Support **website** scanning.
 - Automatically find **api keys** from apks or websites.
-<br />
 
 
 ## Getting Started
-<br />
-
 ### Prerequisites
 * Install [Python 3](https://www.python.org/downloads/).
 * Install **requests** and **zipfile**:
@@ -40,7 +34,6 @@
 pip install requests zipfile
 ```
 * If you want to scan apk file you need install [Java](https://www.java.com/download/).
-<br />
 
 ### Install
 To install firebleed simply run the following command:
@@ -48,7 +41,6 @@ To install firebleed simply run the following command:
 git clone https://github.com/42zen/firebleed
 ```
 This should download the python script in a 'firebleed' folder.
-<br />
 
 ### Verify Installation
 To check if everything is installed start a new terminal, go to the firebleed folder, and run the following command:
@@ -56,17 +48,14 @@ To check if everything is installed start a new terminal, go to the firebleed fo
 python firebleed.py vulnerable-firebase
 ```
 It should show some results ;)
-<br />
+
 
 
 ## CLI Tool
-
 ### Usage
 ```
 Usage: firebleed.py [OPTIONS] <url or apk or project>
 ```
-<br />
-
 
 ### Options
 |  Code  |        Name         | Parameter  |           Description                      |
@@ -77,11 +66,9 @@ Usage: firebleed.py [OPTIONS] <url or apk or project>
 | **-f** | **--fast**          |            | Do not check for extra infos or collisions |
 | **-d** | **--dump**          | foldername | Dump all databases in a folder             |
 | **-q** | **--quiet**         |            | Disable all console messages               |
-<br />
 
 
 ## Examples
-<br />
 
 ### Scan an URL:
 #### With CLI:
@@ -95,7 +82,6 @@ import firebleed
 
 result = firebleed.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
 ```
-<br />
 
 ### Scan a project and dump all databases:
 #### With CLI:
@@ -109,7 +95,6 @@ import firebleed
 
 result = firebleed.scan_project("vulnerable-firebase", dump_folder="results")
 ```
-<br />
 
 ### Scan an APK:
 #### With CLI:
@@ -123,7 +108,6 @@ import firebleed
 
 result = firebleed.scan_apk("vulnerable_app.apk")
 ```
-<br />
 
 ### Dump all databases from a list of URLs:
 #### With CLI from a txt file:
@@ -135,7 +119,6 @@ python firebleed.py -v -u list_of_urls.txt -d results
 ```
 python firebleed.py -v -u list_of_urls.json -d results
 ```
-<br />
 
 
 ## Interestings Papers
@@ -148,7 +131,6 @@ python firebleed.py -v -u list_of_urls.json -d results
 - Firebase Scanner: [by arxenix](https://github.com/arxenix/firebase-scanner), [by shivsahni](https://github.com/shivsahni/FireBaseScanner).
 - [PyreBase](https://github.com/thisbejim/Pyrebase).
 - [Firebase Enumeration](https://cloud.hacktricks.xyz/pentesting-cloud/gcp-security/gcp-services/gcp-databases-enum/gcp-firebase-enum).
-<br />
 
 
 ## Changelog
