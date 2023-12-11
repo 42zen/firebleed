@@ -1,8 +1,7 @@
-# FireBleed by [zen](https://linkedin.com/in/mathias-bochet)
-
+<h1 align="center">FireBleed by <a href="https://linkedin.com/in/mathias-bochet">zen</a></h1>
 
 <div align="center">
-  <img src="./logo.png" alt="Logo">
+  <img src="./logo.png" alt="FireBleed">
 </div>
 
 
