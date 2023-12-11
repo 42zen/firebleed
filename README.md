@@ -10,7 +10,7 @@
 
 
 ## Features
-* Support **urls** and **project names** scanning.
+* Support **urls**, **project names** and **apk files** scanning.
 * Automatically find **collisions** with others services.
 * Scan **Firebase RealTime Database** for project id, status, rules and content.
 * Scan **Firestore Database** for status and rules.
@@ -23,7 +23,6 @@
 
 
 ## Features In Development
-- Support **apk files** scanning.
 - Support **website** scanning.
 - Automatically find **api keys** from apks or websites.
 
