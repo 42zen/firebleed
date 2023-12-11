@@ -138,4 +138,4 @@ python firebleed.py -v -u list_of_urls.json -d results
 
 ## Changelog
 - **06/12/2023** - Initial script that can scan firebase project name for active services and scan firebase realtime database url for infos, status, rules and services collisions. The script handle firebase realtime database, firestore, firebase storage and firebase hosting.
-- **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls, firebase storage database urls, and firebase hosting urls.
+- **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls, firebase storage database urls, and firebase hosting urls. Added fast mode.
