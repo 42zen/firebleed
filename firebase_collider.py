@@ -201,23 +201,19 @@ def scan_realtime_database_from_project(project_id, verbose=False):
     database_id = project_id
     url = f"https://{database_id}.{firebase_realtime_database_domains[0]}"
 
-    # scan the realtime database status
-    status, rules = scan_realtime_database_access(url, verbose=verbose)
+    # scan the realtime database
+    scan_result = scan_realtime_database(url, verbose=verbose)
 
-    # redirect to "default-rtdb" tag
-    if status == "not found" and database_id.endswith("-default-rtdb") == False:
+    # also check for "default-rtdb" tag
+    if scan_result['status'] == 'not found' and database_id.endswith("-default-rtdb") == False:
         database_id += "-default-rtdb"
-        return scan_realtime_database_from_project(database_id, verbose=verbose)
+        url = f"https://{database_id}.{firebase_realtime_database_domains[0]}"
+        default_rtdb_scan_result = scan_realtime_database(url, verbose=verbose)
+        if default_rtdb_scan_result['status'] != 'not found':
+            return default_rtdb_scan_result
 
     # return the scan result
-    return {
-        'url': url,
-        'service': "Firebase RealTime Database",
-        'project_id': project_id,
-        'database_id': database_id,
-        'status': status,
-        'rules': rules
-    }
+    return scan_result
 
 # scan the project id and the database id from a realtime database
 def scan_realtime_database_infos(url):
@@ -274,7 +270,7 @@ def scan_realtime_database_access(url, verbose=False):
         print("[*] Guessing realtime database rules...", end='', flush=True)
     rules = guess_realtime_database_rules(status)
     if verbose == True:
-        print(f"done: {rules}.")
+        print(f"done: {rules if rules is not None else 'unknown'}.")
 
     # return the scan result
     return (status, rules)
@@ -631,6 +627,10 @@ class Settings:
 
     # parse the parameters
     def parse(self, argc, argv):
+        # check the number of arg
+        if argc <= 1:
+            return self.print_usage()
+        
         # convert the argv to a list
         argl = []
         for arg in argv[1:]:
@@ -651,8 +651,7 @@ class Settings:
                         i += 1
                         if i >= argc - 1:
                             print(f"Error: Missing {parameter['parameter']} for option {arg}.")
-                            self.print_usage()
-                            return False
+                            return self.print_usage()
                         if parameter['function'](argl[i]) == False:
                             return False
                     break
@@ -662,8 +661,7 @@ class Settings:
                     self.target = arg
                 else:
                     print(f"Error: Unknown option {arg}.")
-                    self.print_usage()
-                    return False
+                    return self.print_usage()
 
         # check if we have a target
         if self.target is None and self.urls_list is None and self.projects_list and self.apks_list is None:
