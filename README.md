@@ -1,6 +1,6 @@
 <h1 align="center" style="display: inline-block;">
     <a href="https://linkedin.com/in/mathias-bochet">
-        <img src="./logo.png" alt="FireBleed" width="10%">
+        <img src="./logo.png" alt="FireBleed" width="5%">
     </a>
     FireBleed by <a href="https://linkedin.com/in/mathias-bochet">zen</a>
 </h1>
