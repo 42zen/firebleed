@@ -3,7 +3,12 @@ import os
 import sys
 import json
 import requests
-import zipfile
+import shutil
+import subprocess
+
+
+# set the apktool path
+APKTOOL_PATH = 'apktool_2.9.1.jar'
 
 
 # list all the firebases services
@@ -132,11 +137,7 @@ def scan_project(project_id, scan_functions=None, verbose=False):
 def scan_apk(apk_path, verbose=False):
     
     # find the urls from the apk
-    if verbose == True:
-        print(f"[*] Extracting urls from {apk_path}...", end='', flush=True)
-    urls = extract_urls_from_apk(apk_path)
-    if verbose == True:
-        print(f"done: {len(urls)} found.")
+    urls = extract_urls_from_apk(apk_path, verbose=verbose)
 
     # scan all the urls found
     scan_results = []
@@ -147,25 +148,28 @@ def scan_apk(apk_path, verbose=False):
     return scan_results
 
 # scan an apk
-def extract_urls_from_apk(apk_path):
-    # create a tmp folder
-    try:
-        os.mkdir('tmp')
-        delete_folder = True
-    except FileExistsError:
-        delete_folder = False
-    
-    # unzip the apk
-    with zipfile.ZipFile(apk_path, 'r') as zip_ref:
-        zip_ref.extractall('tmp')
+def extract_urls_from_apk(apk_path, verbose=False):
+    # extract the apk with apktool
+    if verbose == True:
+        print(f"[*] Disassembling app {apk_path}...", end='', flush=True)
+    command = f"java -jar {APKTOOL_PATH} d -f -o tmp {apk_path}"
+    result = subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if result.returncode != 0:
+        if verbose == True:
+            print(f"failure.")
+        return None
+    if verbose == True:
+        print(f"success.")
 
     # TODO: find all firebases urls from the source
+    if verbose == True:
+        print(f"[*] Extracting firebases urls from the sources...", end='', flush=True)
     urls = []
+    if verbose == True:
+        print(f"done: {len(urls)} found.")
 
-    # delete the folder if needed
-    if delete_folder == True:
-        # TODO: delete tmp folder
-        pass
+    # delete the folder
+    shutil.rmtree('tmp')
 
     # return the urls
     return urls
@@ -950,15 +954,15 @@ def main(argc, argv):
     target = settings.target
     if target is not None:
         if target.endswith('.apk') == True:
-            target_type, scan_results = 'APK', scan_apk(target, verbose=True)
+            target_type, scan_results = 'apk', scan_apk(target, verbose=True)
         elif target.find('.') != -1:
-            target_type, scan_results = 'URL', scan_url(target, verbose=True)
+            target_type, scan_results = 'url', scan_url(target, verbose=True)
         else:
-            target_type, scan_results = 'Project', scan_project(target, verbose=True)
+            target_type, scan_results = 'project', scan_project(target, verbose=True)
     
         # check if there is a result
         if scan_results == []:
-            print(f"{target_type} '{target}' is not a firebase service.")
+            print(f"No firebases services found for {target_type} '{target}'.")
             return 1
 
         # print the scan result

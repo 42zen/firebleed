@@ -7,11 +7,11 @@
 
 ## Features
 * Support **urls** and **project names** scanning.
+* Automatically find **collisions** with others services.
 * Scan **Firebase RealTime Database** for project id, status, rules and content.
 * Scan **Firestore Database** for status and rules.
 * Scan **Firebase Storage** for status, rules and files.
 * Scan **Firebase Hosting** V1 and V2 for status.
-* Automatically find **collisions** with others services.
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
 * Support **firestore.googleapis.com** urls.
 * Support **firebasestorage.googleapis.com** and **appspot.com** urls.
@@ -21,7 +21,7 @@
 ## Features In Development
 - Support **apk files** scanning.
 - Support **website** scanning.
-- Automatically find **api keys** from apk.
+- Automatically find **api keys** from apks or websites.
 
 
 ## Getting Started
