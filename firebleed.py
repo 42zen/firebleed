@@ -673,7 +673,7 @@ class Settings:
     
     # print the usage
     def print_usage(self):
-        print("Usage: firebase_collider.py [OPTIONS] <url or apk or project>")
+        print("Usage: firebleed.py [OPTIONS] <url or apk or project>")
         print("OPTIONS:")
         for parameter in self.parameters():
             print("  -%s or --%-8s : %s" % (parameter['code'], parameter['name'], parameter['description']))

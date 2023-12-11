@@ -1,8 +1,8 @@
-# The Firebase Collider by [zen](https://linkedin.com/in/mathias-bochet)
+# FireBleed by [zen](https://linkedin.com/in/mathias-bochet)
 
 
 ## Overview
-**The Firebase Collider** is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various [Firebase](https://firebase.google.com/) services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
+**FireBleed** is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various [Firebase](https://firebase.google.com/) services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
 
 
 ## Features
@@ -32,16 +32,16 @@ pip install requests zipfile
 ```
 
 ### Install
-To install firebase collider simply run the following command:
+To install firebleed simply run the following command:
 ```
-pip install firebase_collider
+pip install firebleed
 ```
 This will install the python library and the CLI tool.
 
 ### Verify Installation
 To check if everything is installed start a new terminal and run the following command:
 ```
-python firebase_collider.py vulnerable-firebase
+python firebleed.py vulnerable-firebase
 ```
 It should show some results ;)
 
@@ -50,7 +50,7 @@ It should show some results ;)
 
 ### Usage
 ```
-Usage: firebase_collider.py [OPTIONS] <url or apk or project>
+Usage: firebleed.py [OPTIONS] <url or apk or project>
 ```
 
 
@@ -70,51 +70,51 @@ Usage: firebase_collider.py [OPTIONS] <url or apk or project>
 ### Scan an URL:
 #### With CLI:
 ```
-python firebase_collider.py https://vulnerable-firebase-default-rtdb.firebaseio.com
+python firebleed.py https://vulnerable-firebase-default-rtdb.firebaseio.com
 ```
 
 #### With Python:
 ```
-import firebase_collider
+import firebleed
 
-result = firebase_collider.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
+result = firebleed.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
 ```
 
 ### Scan a project and dump all databases:
 #### With CLI:
 ```
-python firebase_collider.py vulnerable-firebase -d results
+python firebleed.py vulnerable-firebase -d results
 ```
 
 #### With Python:
 ```
-import firebase_collider
+import firebleed
 
-result = firebase_collider.scan_project("vulnerable-firebase", dump_folder="results")
+result = firebleed.scan_project("vulnerable-firebase", dump_folder="results")
 ```
 
 ### Scan an APK:
 #### With CLI:
 ```
-python firebase_collider.py vulnerable_app.apk
+python firebleed.py vulnerable_app.apk
 ```
 
 #### With Python:
 ```
-import firebase_collider
+import firebleed
 
-result = firebase_collider.scan_apk("vulnerable-firebase")
+result = firebleed.scan_apk("vulnerable-firebase")
 ```
 
 ### Dump all databases from a list of URLs:
 #### With CLI from a txt file:
 ```
-python firebase_collider.py -v -u list_of_urls.txt -d results
+python firebleed.py -v -u list_of_urls.txt -d results
 ```
 
 #### With CLI from a json file:
 ```
-python firebase_collider.py -v -u list_of_urls.json -d results
+python firebleed.py -v -u list_of_urls.json -d results
 ```
 
 
