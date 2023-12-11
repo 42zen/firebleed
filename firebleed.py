@@ -5,10 +5,12 @@ import json
 import requests
 import shutil
 import subprocess
+import string
 
 
-# set the apktool path
-APKTOOL_PATH = 'apktool_2.9.1.jar'
+# set the apktool settings
+APKTOOL_FILENAME = 'apktool_2.9.1.jar'
+APKTOOL_URL = f'https://bitbucket.org/iBotPeaches/apktool/downloads/{APKTOOL_FILENAME}'
 
 
 # list all the firebases services
@@ -39,13 +41,23 @@ firebase_storage_database_url = f"https://{firebase_storage_database_domain}/v0/
 firebase_hosting_v1_domain = 'firebaseapp.com'
 firebase_hosting_v2_domain = 'web.app'
 
+# set the firebase domains list
+firebase_domains = firebase_realtime_database_domains + [
+    firebase_firestore_database_domain,
+    firebase_storage_database_domain,
+    firebase_hosting_v1_domain,
+    firebase_hosting_v2_domain
+]
+
 
 # set debug mode
 DEBUG_MODE = True
 
 
 # scan a url
-def scan_url(url, verbose=False):
+def scan_url(url, verbose=False, fast_mode=False, dump_folder=None):
+
+    # TODO: handle dump_folder
 
     # clean the url
     if url.startswith('http://') == False and url.startswith('https://') == False:
@@ -99,19 +111,22 @@ def scan_url(url, verbose=False):
     # run the scan process
     if service_type in scan_processes:
         scan_process = scan_processes[service_type]
-        scan_result = scan_process['main_scanner'](url, verbose=verbose)
+        scan_result = scan_process['main_scanner'](url, verbose=verbose, fast_mode=fast_mode)
         if scan_result is None:
             return []
         if scan_result['status'] != 'not found':
             scan_results += [ scan_result ]
-        project_id = scan_result['project_id']
-        scan_results += scan_project(project_id, scan_functions=scan_process['collision_scanners'], verbose=verbose)
+        if fast_mode == False:
+            project_id = scan_result['project_id']
+            scan_results += scan_project(project_id, scan_functions=scan_process['collision_scanners'], verbose=verbose)
 
     # return the scan results
     return scan_results
 
 # scan a project
-def scan_project(project_id, scan_functions=None, verbose=False):
+def scan_project(project_id, scan_functions=None, verbose=False, dump_folder=None):
+
+    # TODO: handle dump_folder
 
     # init the scan
     scan_results = []
@@ -134,7 +149,7 @@ def scan_project(project_id, scan_functions=None, verbose=False):
     return scan_results
 
 # scan an apk
-def scan_apk(apk_path, verbose=False):
+def scan_apk(apk_path, verbose=False, fast_mode=False, dump_folder=None):
     
     # find the urls from the apk
     urls = extract_urls_from_apk(apk_path, verbose=verbose)
@@ -142,37 +157,138 @@ def scan_apk(apk_path, verbose=False):
     # scan all the urls found
     scan_results = []
     for url in urls:
-        scan_results += scan_url(url, verbose=verbose)
+        scan_results += scan_url(url, verbose=verbose, fast_mode=fast_mode, dump_folder=dump_folder)
 
     # return the scan results
     return scan_results
 
-# scan an apk
+# extract firebase urls from an apk
 def extract_urls_from_apk(apk_path, verbose=False):
-    # extract the apk with apktool
+
+    # download apktool if needed
+    if os.path.exists(APKTOOL_FILENAME) == False:
+        if verbose == True:
+            print(f"[*] Downloading apktool...", end='', flush=True)
+            response = requests.get(APKTOOL_URL)
+            if response.status_code != 200:
+                if verbose == True:
+                    print("failure.")
+                return None
+            with open(APKTOOL_FILENAME, 'wb') as file:
+                file.write(response.content)
+            if verbose == True:
+                print("success.")
+
+    # disassemble the apk with apktool
     if verbose == True:
         print(f"[*] Disassembling app {apk_path}...", end='', flush=True)
-    command = f"java -jar {APKTOOL_PATH} d -f -o tmp {apk_path}"
+    command = f"java -jar {APKTOOL_FILENAME} d -f -o tmp {apk_path}"
     result = subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if result.returncode != 0:
         if verbose == True:
-            print(f"failure.")
+            print("failure.")
         return None
+    files = []
+    for foldername, subfolders, filenames in os.walk('tmp'):
+        for filename in filenames:
+            files += [ os.path.join(foldername, filename) ]
+    files_count = len(files)
     if verbose == True:
-        print(f"success.")
+        print(f"success: {files_count} files.")
 
-    # TODO: find all firebases urls from the source
+    # find all firebases urls from the source
     if verbose == True:
-        print(f"[*] Extracting firebases urls from the sources...", end='', flush=True)
+        print(f"[*] Extracting firebases urls from the sources...       ", end='', flush=True)
+        file_index = 0
     urls = []
+    for file_path in files:
+        if verbose == True:
+            progress = "%-7s" % ("%0.2f%%" % (100 * file_index / files_count))
+            print('\b' * 7 + progress, end='', flush=True)
+            file_index += 1
+        extracted_urls = extract_urls_from_file(file_path)
+        for url in extracted_urls:
+            if url not in urls:
+                urls += [ url ]
     if verbose == True:
-        print(f"done: {len(urls)} found.")
+        print('\b' * 7 + f"done: {len(urls)} found.")
 
     # delete the folder
     shutil.rmtree('tmp')
 
     # return the urls
     return urls
+
+# extract firebase urls from a file
+def extract_urls_from_file(file_path):
+
+    # find the encoding for the file
+    encoding = find_file_encoding(file_path)
+    if encoding is None:
+        return []
+
+    # search in the file for firebase domains
+    extracts = {}
+    with open(file_path, 'r', encoding=encoding) as file:
+        for line_number, line in enumerate(file, start=1):
+            for firebase_domain in firebase_domains:
+                if firebase_domain in line:
+                    extract = {
+                        'path': file_path,
+                        'line_number': line_number,
+                        'line': line.strip()
+                    }
+                    if firebase_domain not in extracts:
+                        extracts[firebase_domain] = [ extract ]
+                    else:
+                        extracts[firebase_domain] += [ extract ]
+
+    # parse the extracted urls
+    urls = []
+    alphanumeric_characters = list(string.ascii_letters + string.digits)
+    url_unreserved_characters = ['-', '_', '.', '~'] + alphanumeric_characters
+    url_reserved_characters = [':', '/', '?', '#', '[', ']', '@', '%']
+    url_allowed_characters = url_reserved_characters + url_unreserved_characters
+    for firebase_domain in extracts:
+        for extract in extracts[firebase_domain]:
+            line = extract['line']
+            line_size = len(line)
+            pos = line.find(firebase_domain)
+            for start_pos in range(pos - 1, 0, -1):
+                if line[start_pos] in url_allowed_characters:
+                    continue
+                start_pos += 1
+                break
+            for stop_pos in range(pos + len(firebase_domain), line_size):
+                if line[stop_pos] in url_allowed_characters:
+                    continue
+                break
+            url = line[start_pos:stop_pos]
+            if url not in urls:
+                urls += [ url ]
+    
+    # return the urls list
+    return urls
+
+# find a file encoding
+def find_file_encoding(file_path):
+
+    encodings = [
+        'cp1252',
+        'utf-8',
+        'ascii',
+    ]
+
+    for encoding in encodings:
+        try:
+            with open(file_path, 'r', encoding=encoding) as file:
+                for line_number, line in enumerate(file, start=1):
+                    continue
+            return encoding
+        except UnicodeDecodeError:
+            pass
+
+    return None
 
 # find the type of firebase service from a url
 def find_service_from_url(url, verbose=False):
@@ -209,22 +325,24 @@ def find_service_from_url(url, verbose=False):
     return service_type
 
 # scan a firebase realtime database from an url
-def scan_realtime_database_from_url(url, verbose=False):
+def scan_realtime_database_from_url(url, verbose=False, fast_mode=False):
 
     # scan the realtime database infos
-    if verbose == True:
-        print("[*] Scanning realtime database infos...", end='', flush=True)
-    project_id, database_id = None, None
-    result = scan_realtime_database_infos(url)
-    if result is not None:
-        project_id, database_id = result
+    if fast_mode == False:
         if verbose == True:
-            print(f"done: project is {project_id}, database is {database_id}.")
-    else:
-        if verbose == True:
-            print("done: not found.")
+            print("[*] Scanning realtime database infos...", end='', flush=True)
+        project_id, database_id = None, None
+        result = scan_realtime_database_infos(url)
+        if result is not None:
+            project_id, database_id = result
+            if verbose == True:
+                print(f"done: project is {project_id}, database is {database_id}.")
+        else:
+            if verbose == True:
+                print("done: not found.")
 
-        # guess the realtime database infos
+    # guess the realtime database infos
+    if result is None:
         if verbose == True:
             print("[*] Guessing realtime database infos...", end='', flush=True)
         result = guess_realtime_database_infos(url)
@@ -440,7 +558,7 @@ def guess_realtime_database_rules(status):
     return None
 
 # scan a firebase realtime database from an url
-def scan_firestore_database_from_url(url, verbose=False):
+def scan_firestore_database_from_url(url, verbose=False, fast_mode=False):
     
     # find project from url
     pos = url.find('/projects/')
@@ -536,7 +654,7 @@ def scan_firestore_database_from_project(project_id, database_id="(default)", co
     return scan_result
 
 # scan a firebase storage database from an url
-def scan_storage_database_from_url(url, verbose=False):
+def scan_storage_database_from_url(url, verbose=False, fast_mode=False):
     
     # find appspot from storage url
     pos = url.find(firebase_storage_database_domain + '/')
@@ -623,7 +741,7 @@ def scan_storage_database_from_appspot(appspot_id, verbose=False):
     }
 
 # scan a firebase hosting from an url
-def scan_hosting_from_url(url, verbose=False):
+def scan_hosting_from_url(url, verbose=False, fast_mode=False):
 
     # clean the url from protocol
     if url.startswith('http://') == True:
@@ -748,7 +866,7 @@ class Settings:
             'name': 'fast',
             'code': 'f',
             'parameter': None,
-            'description': 'Do not check for database infos or collisions',
+            'description': 'Do not check for extra infos or collisions',
             'function': self.enable_fast_mode
         },
         {
@@ -759,11 +877,11 @@ class Settings:
             'function': self.set_dump_folder
         },
         {
-            'name': 'verbose',
-            'code': 'v',
+            'name': 'quiet',
+            'code': 'q',
             'parameter': None,
-            'description': 'Enable verbosity message',
-            'function': self.enable_verbose
+            'description': 'Disable console messages',
+            'function': self.disable_verbose
         },
         {
             'name': 'help',
@@ -782,7 +900,7 @@ class Settings:
         self.apks_list = None
         self.fast_mode = False
         self.dump_folder = None
-        self.verbose = False
+        self.verbose = True
 
     # parse the parameters
     def parse(self, argc, argv):
@@ -933,45 +1051,36 @@ class Settings:
         self.dump_folder = dump_folder
         return True
     
-    # enable verbose message
-    def enable_verbose(self):
-        self.verbose = True
+    # disable console message
+    def disable_verbose(self):
+        self.verbose = False
         return True
 
 
 # main function
 def main(argc, argv):
 
-    # TODO: handle fast mode
-    # TODO: handle dump mode
-
     # parse the settings
     settings = Settings()
     if settings.parse(argc, argv) == False:
         return 1
-
-    # scan the target if any
     target = settings.target
-    if target is not None:
-        if target.endswith('.apk') == True:
-            target_type, scan_results = 'apk', scan_apk(target, verbose=True)
-        elif target.find('.') != -1:
-            target_type, scan_results = 'url', scan_url(target, verbose=True)
-        else:
-            target_type, scan_results = 'project', scan_project(target, verbose=True)
-    
-        # check if there is a result
-        if scan_results == []:
-            print(f"No firebases services found for {target_type} '{target}'.")
-            return 1
+    verbose = settings.verbose
+    fast_mode = settings.fast_mode
+    dump_folder = settings.dump_folder
 
-        # print the scan result
-        print_scan_results(scan_results)
+    # scan the target
+    if target is not None:
+        scan_results = scan_target(target, verbose=verbose, fast_mode=fast_mode, dump_folder=dump_folder)
+        if scan_results is None:
+            print(f"No firebases services found for '{target}'.")
+        else:
+            print_scan_results(scan_results)
 
     # scan the list of urls
     if settings.urls_list is not None:
         for url in settings.urls_list:
-            scan_results = scan_url(url, verbose=True)
+            scan_results = scan_url(url, verbose=verbose, fast_mode=fast_mode, dump_folder=dump_folder)
             if scan_results == []:
                 continue
             print_scan_results(scan_results)
@@ -979,7 +1088,7 @@ def main(argc, argv):
     # scan the list of projects
     if settings.projects_list is not None:
         for project in settings.projects_list:
-            scan_results = scan_project(project, verbose=True)
+            scan_results = scan_project(project, verbose=verbose, dump_folder=dump_folder)
             if scan_results == []:
                 continue
             print_scan_results(scan_results)
@@ -987,7 +1096,7 @@ def main(argc, argv):
     # scan the list of apks
     if settings.apks_list is not None:
         for apk in settings.apks_list:
-            scan_results = scan_apk(apk, verbose=True)
+            scan_results = scan_apk(apk, verbose=verbose, fast_mode=fast_mode, dump_folder=dump_folder)
             if scan_results == []:
                 continue
             print_scan_results(scan_results)
@@ -995,11 +1104,28 @@ def main(argc, argv):
     # end of process
     return 0
 
+# scan a target
+def scan_target(target, verbose=False, fast_mode=None, dump_folder=None):
+    if target.endswith('.apk') == True:
+        scan_results = scan_apk(target, verbose=verbose, fast_mode=fast_mode, dump_folder=dump_folder)
+    elif target.find('.') != -1:
+        scan_results = scan_url(target, verbose=verbose, fast_mode=fast_mode, dump_folder=dump_folder)
+    else:
+        scan_results = scan_project(target, verbose=verbose, dump_folder=dump_folder)
+    
+    # check if there is no result
+    if scan_results == []:
+        return None
+    
+    # return the scan results
+    return scan_results
+
 # print a scan results
 def print_scan_results(scan_results):
-    print(f"\nProject: {scan_results[0]['project_id']}")
+    print(f"Project: {scan_results[0]['project_id']}")
     for scan_result in scan_results:
         print(f"  %-28s : %-20s : %s" % (scan_result['service'], scan_result['status'], scan_result['url']))
+    print("")
 
 
 # run the cli

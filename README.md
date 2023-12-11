@@ -1,6 +1,9 @@
 # FireBleed by [zen](https://linkedin.com/in/mathias-bochet)
 
 
+![FireBleed](./logo.png)
+
+
 ## Overview
 **FireBleed** is a powerful tool designed to identify vulnerabilities and assess security risks within Firebase projects. Leveraging its extensive feature set, the tool scans various [Firebase](https://firebase.google.com/) services, including [RealTime Database](https://firebase.google.com/docs/database), [Firestore Database](https://firebase.google.com/docs/firestore), [Firebase Storage](https://firebase.google.com/docs/storage), and [Firebase Hosting](https://firebase.google.com/docs/hosting), to provide comprehensive insights into project status, rules, and potential collisions with other services.
 
@@ -31,6 +34,7 @@
 ```
 pip install requests zipfile
 ```
+* If you want to scan apk file you need install [Java](https://www.java.com/download/).
 
 ### Install
 To install firebleed simply run the following command:
