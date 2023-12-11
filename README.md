@@ -1,11 +1,11 @@
-<div align="center">
+<div align="center" style="display: inline-block;">
   <a href="https://linkedin.com/in/mathias-bochet">
-    <img src="./logo.png" alt="FireBleed" width="50%">
+    <img src="./logo.png" alt="FireBleed" width="10%">
   </a>
 </div>
 
+<h1 align="center" style="display: inline-block;">FireBleed by <a href="https://linkedin.com/in/mathias-bochet">zen</a></h1>
 
-<h1 align="center">FireBleed by <a href="https://linkedin.com/in/mathias-bochet">zen</a></h1>
 
 
 ## Overview
