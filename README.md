@@ -11,7 +11,7 @@
 * Scan **Firestore Database** for status and rules.
 * Scan **Firebase Storage** for status, rules and files.
 * Scan **Firebase Hosting** V1 and V2 for status.
-* Automatically find [collisions](https://medium.com/TODO) with others services.
+* Automatically find **collisions** with others services.
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
 * Support **firestore.googleapis.com** urls.
 
