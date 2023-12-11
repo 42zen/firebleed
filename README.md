@@ -14,7 +14,7 @@
 * Automatically find **collisions** with others services.
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
 * Support **firestore.googleapis.com** urls.
-- Support **firebasestorage.googleapis.com** and **appspot.com** urls.
+* Support **firebasestorage.googleapis.com** and **appspot.com** urls.
 
 
 ## Features In Development
