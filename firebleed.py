@@ -6,6 +6,12 @@ import requests
 import zipfile
 
 
+# list all the firebases services
+FIREBASE_REALTIME_DATABASE = "Firebase RealTime Database"
+FIREBASE_FIRESTORE_DATABASE = "Firebase Firestore Database"
+FIREBASE_STORAGE_DATABASE = "Firebase Storage Database"
+FIREBASE_HOSTING = "Firebase Hosting"
+
 
 # list of firebase realtime database domains
 firebase_realtime_database_domains = [
@@ -17,7 +23,8 @@ firebase_realtime_database_domains = [
 ]
 
 # set the firebase firestore database url
-firebase_firestore_database_url = "https://firestore.googleapis.com/v1"
+firebase_firestore_database_domain = 'firestore.googleapis.com'
+firebase_firestore_database_url = f"https://{firebase_firestore_database_domain}/v1"
 
 # set the firebase storage database url
 firebase_storage_database_url = "https://firebasestorage.googleapis.com/v0/b"
@@ -37,7 +44,6 @@ def scan_url(url, verbose=False):
     # clean the url
     if url.startswith('http://') == False and url.startswith('https://') == False:
         url = 'https://' + url
-    url = url[:-1] if url[-1] == '/' else url
 
     # find the service type
     service_type = find_service_from_url(url, verbose=verbose)
@@ -45,11 +51,11 @@ def scan_url(url, verbose=False):
     # init the scan
     scan_results = []
 
-    # scan the realtime database
-    if service_type == "Firebase RealTime Database":
-
+    # check if this is a realtime database url
+    if service_type == FIREBASE_REALTIME_DATABASE:
+        
         # scan the realtime database
-        scan_result = scan_realtime_database(url, verbose=verbose)
+        scan_result = scan_realtime_database_from_url(url, verbose=verbose)
         if scan_result['status'] != 'not found':
             scan_results += [ scan_result ]
         project_id = scan_result['project_id']
@@ -57,6 +63,26 @@ def scan_url(url, verbose=False):
         # scan the others services
         scan_functions = [
             scan_firestore_database_from_project,
+            scan_storage_database_from_project,
+            scan_hosting_v1_from_project,
+            scan_hosting_v2_from_project
+        ]
+        scan_results += scan_project(project_id, scan_functions=scan_functions, verbose=verbose)
+
+    # check if this is a firestore database url
+    elif service_type == FIREBASE_FIRESTORE_DATABASE:
+
+        # scan the realtime database
+        scan_result = scan_firestore_database_from_url(url, verbose=verbose)
+        if scan_result is None:
+            return []
+        if scan_result['status'] != 'not found':
+            scan_results += [ scan_result ]
+        project_id = scan_result['project_id']
+
+        # scan the others services
+        scan_functions = [
+            scan_realtime_database_from_project,
             scan_storage_database_from_project,
             scan_hosting_v1_from_project,
             scan_hosting_v2_from_project
@@ -144,7 +170,11 @@ def find_service_from_url(url, verbose=False):
     # check if this is a firebase realtime database
     for domain in firebase_realtime_database_domains:
         if url.find(domain) != -1:
-            service_type = "Firebase RealTime Database"
+            service_type = FIREBASE_REALTIME_DATABASE
+
+    # check if this is a firebase firestore database
+    if url.find(firebase_firestore_database_domain) != -1:
+        service_type = FIREBASE_FIRESTORE_DATABASE
 
     # print logs  
     if verbose == True:
@@ -153,8 +183,8 @@ def find_service_from_url(url, verbose=False):
     # service not found
     return service_type
 
-# scan a firebase realtime database
-def scan_realtime_database(url, verbose=False):
+# scan a firebase realtime database from an url
+def scan_realtime_database_from_url(url, verbose=False):
 
     # scan the realtime database infos
     if verbose == True:
@@ -187,14 +217,14 @@ def scan_realtime_database(url, verbose=False):
     # return the scan result
     return {
         'url': url,
-        'service': "Firebase RealTime Database",
+        'service': FIREBASE_REALTIME_DATABASE,
         'project_id': project_id,
         'database_id': database_id,
         'status': status,
         'rules': rules
     }
 
-# scan a firebase realtime database
+# scan a firebase realtime database from a project
 def scan_realtime_database_from_project(project_id, verbose=False):
 
     # build the url
@@ -202,13 +232,13 @@ def scan_realtime_database_from_project(project_id, verbose=False):
     url = f"https://{database_id}.{firebase_realtime_database_domains[0]}"
 
     # scan the realtime database
-    scan_result = scan_realtime_database(url, verbose=verbose)
+    scan_result = scan_realtime_database_from_url(url, verbose=verbose)
 
     # also check for "default-rtdb" tag
     if scan_result['status'] == 'not found' and database_id.endswith("-default-rtdb") == False:
         database_id += "-default-rtdb"
         url = f"https://{database_id}.{firebase_realtime_database_domains[0]}"
-        default_rtdb_scan_result = scan_realtime_database(url, verbose=verbose)
+        default_rtdb_scan_result = scan_realtime_database_from_url(url, verbose=verbose)
         if default_rtdb_scan_result['status'] != 'not found':
             return default_rtdb_scan_result
 
@@ -279,6 +309,7 @@ def scan_realtime_database_access(url, verbose=False):
 def scan_realtime_database_status(url):
 
     # request the database content
+    url = url[:-1] if url[-1] == '/' else url
     response = requests.get(url + '/.json', stream=True)
     content_length = int(response.headers['Content-Length'])
 
@@ -383,8 +414,47 @@ def guess_realtime_database_rules(status):
     # no rules
     return None
 
-# scan a firebase realtime database
-def scan_firestore_database_from_project(project_id, database_id="(default)", verbose=False):
+# scan a firebase realtime database from an url
+def scan_firestore_database_from_url(url, verbose=False):
+    
+    # find project from url
+    pos = url.find('/projects/')
+    if pos == -1:
+        return None
+    project_id = url[pos + 10:]
+    end_pos = project_id.find('/')
+    if end_pos != -1:
+        project_id = project_id[:end_pos]
+    if len(project_id) == 0:
+        return None
+    
+    # find database from url
+    pos = url.find('/databases/')
+    database_id = ''
+    if pos != -1:
+        database_id = url[pos + 11:]
+        end_pos = database_id.find('/')
+        if end_pos != -1:
+            database_id = project_id[:end_pos]
+    if len(database_id) == 0:
+        return scan_firestore_database_from_project(project_id, verbose=verbose)
+    
+    # find collection from url
+    pos = url.find('/documents/')
+    collection_id = ''
+    if pos != -1:
+        collection_id = url[pos + 11:]
+        end_pos = collection_id.find('/')
+        if end_pos != -1:
+            collection_id = project_id[:end_pos]
+    if len(collection_id) == 0:
+        return scan_firestore_database_from_project(project_id, database_id=database_id, verbose=verbose)
+    
+    # scan the specific collection
+    return scan_firestore_database_from_project(project_id, database_id=database_id, collection_id=collection_id, verbose=verbose)
+
+# scan a firebase realtime database from a project
+def scan_firestore_database_from_project(project_id, database_id="(default)", collection_id="users", verbose=False):
     
     # print logs
     if verbose == True:
@@ -392,7 +462,7 @@ def scan_firestore_database_from_project(project_id, database_id="(default)", ve
 
     # build the firestore url
     url_path = f"projects/{project_id}/databases/{database_id}"
-    url = f"{firebase_firestore_database_url}/{url_path}/documents/*"
+    url = f"{firebase_firestore_database_url}/{url_path}/documents/{collection_id}"
         
     # request the database status
     response = requests.get(url)
@@ -430,7 +500,7 @@ def scan_firestore_database_from_project(project_id, database_id="(default)", ve
     # return the scan result
     scan_result = {
         'url': url,
-        'service': 'Firebase Firestore Database',
+        'service': FIREBASE_FIRESTORE_DATABASE,
         'project_id': project_id,
         'database_id': database_id,
         'status': status,
@@ -481,7 +551,7 @@ def scan_storage_database_from_project(project_id, verbose=False):
     # return the scan result
     return {
         'url': url,
-        'service': 'Firebase Storage Database',
+        'service': FIREBASE_STORAGE_DATABASE,
         'project_id': project_id,
         'status': status,
         'rules': rules,
@@ -517,7 +587,7 @@ def scan_hosting_v1_from_project(project_id, verbose=False):
     # return the scan result
     return {
         'url': url,
-        'service': 'old Firebase Hosting',
+        'service': FIREBASE_HOSTING,
         'project_id': project_id,
         'status': status,
     }
@@ -552,7 +622,7 @@ def scan_hosting_v2_from_project(project_id, verbose=False):
     # return the scan result
     return {
         'url': url,
-        'service': 'Firebase Hosting',
+        'service': FIREBASE_HOSTING,
         'project_id': project_id,
         'status': status,
     }

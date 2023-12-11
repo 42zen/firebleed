@@ -13,11 +13,11 @@
 * Scan **Firebase Hosting** V1 and V2 for status.
 * Automatically find [collisions](https://medium.com/TODO) with others services.
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
+* Support **firestore.googleapis.com** urls.
 
 
 ## Features In Development
 - Support **apk files** scanning.
-- Support for **firestore.googleapis.com** urls.
 - Support for **firebasestorage.googleapis.com** and **appspot.com** urls.
 - Support for **firebaseapp.com** and **web.app** urls.
 - Support for **custom urls** scanning.
