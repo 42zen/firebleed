@@ -11,9 +11,9 @@
 ## Features
 * Support **urls**, **project names** and **apk files** scanning.
 * Automatically find **collisions** with others services.
-* Scan **Firebase RealTime Database** for project id, status, rules and content.
-* Scan **Firestore Database** for status and rules.
-* Scan **Firebase Storage** for status, rules and files.
+* Scan **Firebase RealTime Database** for project id, status, rules and **content**.
+* Scan **Firestore Database** for status, rules and **collections**.
+* Scan **Firebase Storage** for status, rules and **files**.
 * Scan **Firebase Hosting** V1 and V2 for status.
 * Support **firebaseio.com** and **firebasedatabase.app** urls.
 * Support **firestore.googleapis.com** urls.
@@ -22,8 +22,7 @@
 
 
 ## Features In Development
-- Dump all databases to a folder.
-- Support **website** scanning.
+- Support **website** in-depth scanning.
 - Automatically find **api keys** from apks or websites.
 - Access firebase services from **api keys**.
 - Scan **Firebase Remote Config**.
@@ -138,4 +137,5 @@ python firebleed.py -v -u list_of_urls.json -d results
 
 ## Changelog
 - **06/12/2023** - Initial script that can scan firebase project name for active services and scan firebase realtime database url for infos, status, rules and services collisions. The script handle firebase realtime database, firestore, firebase storage and firebase hosting.
-- **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls, firebase storage database urls, and firebase hosting urls. Added fast mode.
+- **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls, firebase storage database urls, and firebase hosting urls. Added fast mode option.
+- **12/12/2023** - Added dumping for realtime, storage, and firestore databases with dump folder option.
