@@ -569,7 +569,7 @@ def dump_realtime_database(scan_result, dump_folder):
                     if chunk:
                         file.write(chunk)
 
-# scan a firebase realtime database from an url
+# scan a firestore database from an url
 def scan_firestore_database_from_url(url, verbose=False, fast_mode=False):
     
     # find project from url
@@ -608,7 +608,7 @@ def scan_firestore_database_from_url(url, verbose=False, fast_mode=False):
     # scan the specific collection
     return scan_firestore_database_from_project(project_id, database_id=database_id, collection_id=collection_id, verbose=verbose)
 
-# scan a firebase realtime database from a project
+# scan a firestore database from a project
 def scan_firestore_database_from_project(project_id, database_id=None, collection_id=None, verbose=False):
     
     # print logs
@@ -673,6 +673,31 @@ def scan_firestore_database_from_project(project_id, database_id=None, collectio
     if rules != None:
         scan_result['rules'] = rules
     return scan_result
+
+# dump a firestore database
+def dump_firestore_database(scan_result, dump_folder):
+    if scan_result['status'].find(' bytes') != -1:
+        with requests.get(scan_result['url'], stream=True) as response:
+            dump_path = os.path.join(dump_folder, 'firestore-databases')
+            try:
+                os.mkdir(dump_path)
+            except FileExistsError:
+                pass
+            dump_path = os.path.join(dump_path, scan_result['project_id'])
+            try:
+                os.mkdir(dump_path)
+            except FileExistsError:
+                pass
+            dump_path = os.path.join(dump_path, scan_result['database_id'])
+            try:
+                os.mkdir(dump_path)
+            except FileExistsError:
+                pass
+            file_path = os.path.join(dump_path, scan_result['collection_id'] + '.json')
+            with open(file_path, 'wb') as file:
+                for chunk in response.iter_content(chunk_size=2048):
+                    if chunk:
+                        file.write(chunk)
 
 # scan a firebase storage database from an url
 def scan_storage_database_from_url(url, verbose=False, fast_mode=False):
@@ -1183,7 +1208,9 @@ def dump_databases(scan_results, dump_folder):
         if scan_result['service'] == FIREBASE_REALTIME_DATABASE:
             dump_realtime_database(scan_result, dump_folder)
 
-        # TODO: dump firestore database
+        # dump firestore database
+        if scan_result['service'] == FIREBASE_FIRESTORE_DATABASE:
+            dump_firestore_database(scan_result, dump_folder)
 
         # dump storage database
         if scan_result['service'] == FIREBASE_STORAGE_DATABASE:
