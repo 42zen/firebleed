@@ -124,13 +124,12 @@ python firebleed.py -v -u list_of_urls.json -d results
 
 
 ## Interestings Papers
-- [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes](https://time2hack.com/auth-schemes-in-google-firebase/), [authentication vulnerability](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb) and [rest api](https://firebase.google.com/docs/reference/rest/auth).
-- [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html) and [rest api](https://firebase.google.com/docs/reference/remote-config/rest).
+- [Firebase Authentication](https://firebase.google.com/docs/auth): [manual authentication by j0vsec](https://j0vsec.com/post/firebase_during_bug_bounty_hunting/), [authentication shemes by time2hack](https://time2hack.com/auth-schemes-in-google-firebase/), [authentication vulnerability by t0mstah](https://medium.com/swlh/google-firebase-authentication-vulnerability-245050cb7ceb) and [rest api](https://firebase.google.com/docs/reference/rest/auth).
+- [Firebase Remote Config](https://firebase.google.com/docs/remote-config): [remote config dump by deesee](https://blog.deesee.xyz/android/automation/2019/08/03/firebase-remote-config-dump.html) and [rest api](https://firebase.google.com/docs/reference/remote-config/rest).
 - [Firebase Machine Learning](https://firebase.google.com/docs/ml).
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging).
 - [Brandon Evans Research](https://www.sans.org/white-papers/39885/).
-- [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores): [sources](https://github.com/iosiro/baserunner).
-- Firebase Scanner: [by arxenix](https://github.com/arxenix/firebase-scanner), [by shivsahni](https://github.com/shivsahni/FireBaseScanner).
+- Firebase Scanners: [by arxenix](https://github.com/arxenix/firebase-scanner), [by shivsahni](https://github.com/shivsahni/FireBaseScanner), [Baserunner](https://iosiro.com/blog/baserunner-exploiting-firebase-datastores) ([sources](https://github.com/iosiro/baserunner)).
 - [PyreBase](https://github.com/thisbejim/Pyrebase).
 - [Firebase Enumeration](https://cloud.hacktricks.xyz/pentesting-cloud/gcp-security/gcp-services/gcp-databases-enum/gcp-firebase-enum).
 
