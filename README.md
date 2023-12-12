@@ -22,8 +22,11 @@
 
 
 ## Features In Development
+- Dump all databases to a folder.
 - Support **website** scanning.
 - Automatically find **api keys** from apks or websites.
+- Access firebase services from **api keys**.
+- Scan **Firebase Remote Config**.
 
 
 ## Getting Started
