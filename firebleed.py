@@ -118,6 +118,11 @@ def scan_url(url, verbose=False, fast_mode=False):
             project_id = scan_result['project_id']
             scan_results += scan_project(project_id, scan_functions=scan_process['collision_scanners'], verbose=verbose)
 
+    # TODO: scan the url manually if needed
+        # check if the ip is a google ip and which services is associated with this ip.
+        # check for hosting from header. if YES: check for TXT record.
+        # check the javascript code
+
     # return the scan results
     return scan_results
 
@@ -144,11 +149,13 @@ def scan_project(project_id, scan_functions=None, verbose=False):
     # return the scan results
     return scan_results
 
-# scan an apk
+# scan an apk file
 def scan_apk(apk_path, verbose=False, fast_mode=False):
     
-    # find the urls from the apk
+    # find the urls from the apk files
     urls = extract_urls_from_apk(apk_path, verbose=verbose)
+
+    # TODO: find infos from 'google-services.json'
 
     # scan all the urls found
     scan_results = []
@@ -157,6 +164,8 @@ def scan_apk(apk_path, verbose=False, fast_mode=False):
 
     # return the scan results
     return scan_results
+
+# TODO: scan an ipa file
 
 # extract firebase urls from an apk
 def extract_urls_from_apk(apk_path, verbose=False):
@@ -315,7 +324,7 @@ def find_service_from_url(url, verbose=False):
 
     # print logs  
     if verbose == True:
-        print(f"done: {service_type if service_type is not None else 'unknown'}.")
+        print(f"done: {service_type if service_type is not None else 'not a firebase url'}.")
         
     # service not found
     return service_type
@@ -499,8 +508,8 @@ def scan_realtime_database_status(url):
         if response.status_code != 200:
 
             # check for dynamic errors
-            if response.text.startswith("The Firebase database \'") == True:
-                text = text[23:]
+            if response.text.find("The Firebase database \'") != -1:
+                text = response.text[23:]
                 pos = text.find("\' has ")
                 text = text[pos + 6:]
 
@@ -529,6 +538,10 @@ def scan_realtime_database_status(url):
                 if response.status_code == 404 and pos != -1:
                     end_pos = response.text[pos+84:].find('"') + pos + 84
                     return f"region redirect to {response.text[pos+84:end_pos]}"
+
+            # check for invalid token in path
+            if response.text.find('"error" : "Invalid path: Invalid token in path"') != -1:
+                return "protected"
 
             # unknown status
             if DEBUG_MODE == True:
@@ -582,6 +595,8 @@ def scan_firestore_database_from_url(url, verbose=False, fast_mode=False):
         project_id = project_id[:end_pos]
     if len(project_id) == 0:
         return None
+    
+    # TODO: databases and documents are not parsed correctly
     
     # find database from url
     pos = url.find('/databases/')
@@ -658,7 +673,7 @@ def scan_firestore_database_from_project(project_id, database_id=None, collectio
         if rules is None:
             print(f"done: {status}.")
         else:
-            print(f"done: status='{status}' and rules='{rules}'.")
+            print(f'done: status="{status}" and rules="{rules}".')
 
     # return the scan result
     scan_result = {
@@ -756,10 +771,10 @@ def scan_storage_database_from_appspot(appspot_id, verbose=False):
         files_count = len(json.loads(response.text)['items'])
         status = f'{files_count} public files'
         rules = { 'read': True }
-    elif response.status_code == 403 and response.text == '{\n  "error": {\n    "code": 403,\n    "message": "Permission denied."\n  }\n}\n':
+    elif response.status_code == 403 and response.text.find('Permission denied.') != -1:
         status = 'permission denied'
         rules = { 'read': False }
-    elif response.status_code == 404 and response.text == '{\n  "error": {\n    "code": 404,\n    "message": "Not Found."\n  }\n}':
+    elif response.status_code == 404 and response.text.find('Not Found.') != -1:
         status = 'not found'
     else:
         status = 'unknown status'
@@ -1218,7 +1233,7 @@ def dump_databases(scan_results, dump_folder):
 
 # print a scan results
 def print_scan_results(scan_results):
-    print(f"Project: {scan_results[0]['project_id']}")
+    print(f"\nProject: {scan_results[0]['project_id']}")
     for scan_result in scan_results:
         print(f"  %-28s : %-20s : %s" % (scan_result['service'], scan_result['status'], scan_result['url']))
     print("")
