@@ -12,6 +12,7 @@
 ## Features
 * Support **urls**, **project names** and **apk files** scanning.
 * Automatically find **collisions** with others services.
+* Scan **TXT Records** for project id.
 * Scan **Firebase RealTime Database** for project id, status, rules and **content**.
 * Scan **Firestore Database** for status, rules and **collections**.
 * Scan **Firebase Storage** for status, rules and **files**.
@@ -66,7 +67,6 @@ Usage: firebleed.py [OPTIONS] <url or apk or project>
 | **-u** | **--urls-list**     | filename   | Scan a list of urls from a file            |
 | **-a** | **--apks-list**     | filename   | Scan a list of apks from a file            |
 | **-p** | **--projects-list** | filename   | Scan a list of projects from a file        |
-| **-f** | **--fast**          |            | Do not check for extra infos or collisions |
 | **-d** | **--dump**          | foldername | Dump all databases in a folder             |
 | **-q** | **--quiet**         |            | Disable all console messages               |
 
@@ -76,14 +76,14 @@ Usage: firebleed.py [OPTIONS] <url or apk or project>
 ### Scan an URL:
 #### With CLI:
 ```
-python firebleed.py https://vulnerable-firebase-default-rtdb.firebaseio.com
+python firebleed.py https://example.com
 ```
 
 #### With Python:
 ```
 import firebleed
 
-result = firebleed.scan_url("https://vulnerable-firebase-default-rtdb.firebaseio.com")
+result = firebleed.scan_url("https://example.com")
 ```
 
 ### Scan a project and dump all databases:
@@ -139,3 +139,4 @@ python firebleed.py -v -u list_of_urls.json -d results
 - **06/12/2023** - Initial script that can scan firebase project name for active services and scan firebase realtime database url for infos, status, rules and services collisions. The script handle firebase realtime database, firestore, firebase storage and firebase hosting.
 - **11/12/2023** - Better scan logic for firebase realtime database project. Added support for firebase firestore database urls, firebase storage database urls, and firebase hosting urls. Added fast mode option.
 - **12/12/2023** - Added dumping for realtime, storage, and firestore databases with dump folder option.
+- **09/25/2024** - Removed fast mode. Added TXT records resolution.
